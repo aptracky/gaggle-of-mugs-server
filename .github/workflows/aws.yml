@@ -26,10 +26,13 @@ jobs:
       - name: configure aws credentials
         uses: aws-actions/configure-aws-credentials@v4.0.0
         with:
-          role-to-assume: arn:aws:iam::430393713058:role/github #change to reflect your IAM role’s ARN
+          role-to-assume: arn:aws:iam::430393713058:role/github-admin #change to reflect your IAM role’s ARN
           role-session-name: githubRoleSession
           aws-region: ${{ env.AWS_REGION }}
       # Hello from AWS: WhoAmI
-      - name: Sts GetCallerIdentity
-        run: |
-          cdk deploy
+      - name: Install Deps
+        run: npm install
+      - name: CDK synth
+        run: npx cdk synth
+      - name: CDK deploy
+        run: npx cdk deploy --require-approval never
